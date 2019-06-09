@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"> 
+    <title>chat application</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 col-sm-12">
+            <h1 class="text-centre">
+                MyChat
+                &nbsp;&nbsp;
+                <button id="clear" class="btn btn-danger">clear</button>
+            </h1>
+            <div id="Status"></div>
+            <div id="chat">
+                <input type="text" id="username" class="form-control" placeholder="enter the name"/>
+                <br/><br/>
+                <div class="card">
+                <div id="Message" class="card-block">
+
+
+
+                </div>
+                </div>
+            
+             <textarea id="textarea" class="form-control" placeholder="enter message"></textarea>
+            </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script>
+        (function(){
+          
+        var element=function(id){
+            return document.getElementById(id);
+        }
+        var status=element("Status");
+        var message=element("Message");
+        var textarea=element("textarea");
+        var username=element("username");
+        var clearbtn=element("clear");
+        var statusdefault=status.textContent;
+        var setstatus=function(s){
+            status.textContent=s;
+            if(s!=statusdefault){
+                var delay=setTimeout(function(){
+                    setstatus(statusdefault)},4000);
+                }
+            }
+        
+        var socket=io();
+        
+        if(socket != undefined)
+        {
+            console.log('connected to socket');
+        
+        socket.on('output',function(data){
+            if(data.length)
+            {
+                for(var x=0;x<data.length;x++)
+                {
+                    var message=document.createElement('div');
+                    message.setAttribute('class','chat-message');
+                    message.textContent=data[x].name+":"+data[x].message;
+                    message.appendChild(message);
+                    message.insertBefore(message,message.firstChild);
+                }
+            }
+        })
+        socket.on('status',function(data)
+        {
+            setstatus(typeofdata == 'object'? data.message : data);
+            if(data.clear){
+                textarea.value='';
+            }
+        })
+        textarea.addEventListener('keydown',function(event){
+            if(event.which == 13 && event.shiftKey == false)
+            {
+                socket.emit('input',{ name : username.value , message : textarea.value})
+                event.preventDefault();
+            }
+        })
+        clearbtn.addEventListener('click',function()
+        {
+            socket.emit('clear')
+        })
+        socket.on('cleared',function(){
+            message.textContent='';
+        });
+    }
+    })();
+    </script>
+
+</body>
+</html>

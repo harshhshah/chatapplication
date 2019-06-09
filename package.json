@@ -1,0 +1,37 @@
+{
+  "name": "chat-application",
+  "version": "1.0.0",
+  "description": "A real time chat application using Node js,Mongo DB and Express JS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "Socket.io",
+    "NPM"
+  ],
+  "author": "Harsh Shah",
+  "license": "ISC",
+  "config": {
+    "server": {
+      "port": 8080
+    }
+  },
+  "db": {
+    "url": "mongodb://localhost:27017/chatdb"
+  },
+  "dependencies": {
+    "2": "^2.0.0",
+    "express": "^4.17.0",
+    "ip": "^1.1.5",
+    "mongodb": "^3.2.5",
+    "mongoose": "^5.5.9",
+    "nodemon": "^1.19.0",
+    "path": "^0.12.7",
+    "save": "^2.3.3",
+    "socket.io": "^2.2.0"
+  }
+}
